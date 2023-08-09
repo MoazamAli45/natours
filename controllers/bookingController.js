@@ -74,12 +74,12 @@ const createCheckoutBooking = async (session) => {
   const tour = session.client_reference_id;
   // as we want only id of user
   const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.display_items[0].amount;
+  const price = session.data.object.amount_total;
 
-  await Book.create({ user, tour, price });
+  return await Book.create({ user, tour, price });
 };
 
-exports.webhookCheckout = (req, res, next) => {
+exports.webhookCheckout = async (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -92,11 +92,13 @@ exports.webhookCheckout = (req, res, next) => {
     // send to stripe
     return res.status(400).send(`Webhook error: ${err.message} ${err.stack}}`);
   }
+  let book;
   if (event.type === 'checkout.session.completed')
-    createCheckoutBooking(event.data.object);
+    book = await createCheckoutBooking(event.data.object);
 
   res.status(200).json({
     received: true,
+    book,
   });
 };
 
