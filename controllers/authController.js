@@ -115,13 +115,15 @@ exports.login = CatchAsync(async (req, res, next) => {
 
 // AS WE CAN"T DELETE COOKIE AND MANIPULATE AS WELL
 // SO ON LOGOUT WE WILL SEND AN INVALID COOKIE
+
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
+  const cookieOptions = {
     // will remain for 10 sec
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-  });
-
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookie('jwt', 'loggedout', cookieOptions);
   res.status(200).json({
     status: 'success',
   });
