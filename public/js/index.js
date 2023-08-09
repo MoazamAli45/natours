@@ -1,9 +1,11 @@
+/*eslint disable */
 // console.log('Hello from Parcel New');
 
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { signup } from './signup';
 import { bookTour } from './booking';
+import { showAlert } from './alerts';
 
 const form = document.querySelector('.form-login');
 const logoutBtn = document.querySelector('.nav__el--logout');
@@ -101,4 +103,10 @@ if (bookTourBtn) {
 
     bookTour(tourId);
   });
+}
+
+const alert = document.querySelector('body').dataset.alert;
+if (alert) {
+  // console.log(alert);
+  showAlert('success', alert);
 }

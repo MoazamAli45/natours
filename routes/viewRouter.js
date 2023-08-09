@@ -13,12 +13,13 @@ const bookingController = require('../controllers/bookingController');
 
 // isLoggedIn
 // you can access if user login then show pic on nav
+// router.use(viewController.alerts);
 
 router.get(
   '/',
   //     This is only in development mode we can only create original booking after deployment through stripe payment
   // but in this way we are creating
-  bookingController.createCheckoutBooking,
+  // bookingController.createCheckoutBooking,
   authController.isLoggedIn,
   viewController.getAllTours,
 );

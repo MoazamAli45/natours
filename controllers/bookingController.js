@@ -1,11 +1,15 @@
-const CatchAsync = require('../utils/catchAsync');
+/*eslint disable */
+
 const stripe = require('stripe')(process.env.STRIPE_SECRETKEY);
+const CatchAsync = require('../utils/catchAsync');
 const Tour = require('../Model/tourModel');
+const User = require('../Model/userModel');
 const Book = require('../Model/bookModel');
 
 const handlerFactory = require('./handlerFactory');
+
 exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
-  console.log(req);
+  // console.log(req);
   // Firstly GEt the tour using ID
   const tour = await Tour.findById(req.params.tourId);
 
@@ -15,9 +19,10 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
     payment_method_types: ['card'],
     // Actually We can create booking after deployment using stripe webhooks
     // But this is unsecure but we can use this for testing
-    success_url: `${req.protocol}://${req.get('host')}/?tour=${
-      req.params.tourId
-    }&user=${req.user.id}&price=${tour.price}`,
+    // success_url: `${req.protocol}://${req.get('host')}/?tour=${
+    //   req.params.tourId
+    // }&user=${req.user.id}&price=${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/my-tours`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -52,15 +57,46 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
   });
 });
 
-exports.createCheckoutBooking = async (req, res, next) => {
-  const { user, price, tour } = req.query;
-  // This is fake way of creating we only craete after deplloyment through stripe
-  if (!user && !tour && !price) return next();
+//          FOR DEVELOPMENT PURPOSE ONLY
+// exports.createCheckoutBooking = async (req, res, next) => {
+//   const { user, price, tour } = req.query;
+//   // This is fake way of creating we only craete after deplloyment through stripe
+//   if (!user && !tour && !price) return next();
+
+//   await Book.create({ user, tour, price });
+
+//   // redirecting to home page
+//   res.redirect(req.originalUrl.split('?')[0]);
+// };
+
+const createCheckoutBooking = async (session) => {
+  const tour = session.client_reference_id;
+  // as we want only id of user
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.display_items[0].amount;
 
   await Book.create({ user, tour, price });
+};
 
-  // redirecting to home page
-  res.redirect(req.originalUrl.split('?')[0]);
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhook.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOKKEY,
+    );
+  } catch (err) {
+    // send to stripe
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+  if (event === 'checkout.session.completed')
+    createCheckoutBooking(event.data.object);
+
+  res.status(200).json({
+    received: true,
+  });
 };
 
 exports.createBooking = handlerFactory.createOne(Book);

@@ -67,3 +67,9 @@ exports.getMyTours = async (req, res) => {
     tours,
   });
 };
+exports.alerts = (req, res, next) => {
+  const { alert } = req.query;
+  if (!alert) next();
+  if (alert === 'booking') res.locals.alert = 'Booking created Successfully!';
+  next();
+};

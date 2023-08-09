@@ -11,7 +11,8 @@ html
             link(rel='stylesheet', href='/css/style.css') 
             link(rel='shortcut icon', href='/img/favicon.png', type='image/x-icon')
             title Natours | #{title}
-    body 
+            //-  For booking alert
+    body(data-alert=`${alert ?  alert : ''}`)
         //-Header
         include _header    
 
