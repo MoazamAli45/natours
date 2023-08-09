@@ -38,6 +38,9 @@ mongoose
   .then((con) => {
     // console.log(con.connections);
     console.log('Connected to Database Successfully!');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
   });
 
 const port = process.env.PORT || 8000;
