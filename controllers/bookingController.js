@@ -90,7 +90,7 @@ exports.webhookCheckout = (req, res, next) => {
     );
   } catch (err) {
     // send to stripe
-    return res.status(400).send(`Webhook error: ${err.message}`);
+    return res.status(400).send(`Webhook error: ${err.message} ${err.stack}}`);
   }
   if (event.type === 'checkout.session.completed')
     createCheckoutBooking(event.data.object);
