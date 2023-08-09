@@ -16,8 +16,16 @@ const reviewRouter = require('./routes/reviewRouter');
 const viewRouter = require('./routes/viewRouter');
 const bookingRouter = require('./routes/bookingRouter');
 const compression = require('compression');
+const cors = require('cors');
 
 const app = express();
+
+// Cross Origin Resource Sharing
+// so  that all can access api
+app.use(cors());
+
+// for non-simple request put,patch and delete options is called we also allowing all to access
+app.options('*', cors());
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
