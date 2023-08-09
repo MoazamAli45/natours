@@ -74,7 +74,7 @@ const createCheckoutBooking = async (session) => {
   const tour = session.client_reference_id;
   // as we want only id of user
   const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.data.object.amount_total;
+  const price = session.display_items[0].amount;
 
   return await Book.create({ user, tour, price });
 };
