@@ -8,6 +8,7 @@ const Book = require('../Model/bookModel');
 
 const handlerFactory = require('./handlerFactory');
 
+// tour router
 exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
   // console.log(req);
   // Firstly GEt the tour using ID
@@ -82,7 +83,7 @@ exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
-    event = stripe.webhook.constructEvent(
+    event = stripe.webhooks.constructEvent(
       req.body,
       signature,
       process.env.STRIPE_WEBHOOKKEY,
