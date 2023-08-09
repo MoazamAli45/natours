@@ -17,6 +17,9 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
   // Create the session
   //   console.log(tour);
   const session = await stripe.checkout.sessions.create({
+    metadata: {
+      tourPrice: tour.price, // Store the price in metadata
+    },
     payment_method_types: ['card'],
     // Actually We can create booking after deployment using stripe webhooks
     // But this is unsecure but we can use this for testing
@@ -74,7 +77,7 @@ const createCheckoutBooking = async (session) => {
   const tour = session.client_reference_id;
   // as we want only id of user
   const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.display_items[0].amount;
+  const price = session.metadata.tourPrice;
 
   return await Book.create({ user, tour, price });
 };
