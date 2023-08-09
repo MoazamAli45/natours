@@ -22,7 +22,8 @@ export const bookTour = async (tourId) => {
   // Get the sessioon from api
   try {
     const session = await axios(
-      `http://localhost:8000/api/v1/tours/bookings/checkout-session/${tourId}`,
+      //   this will be same as relative as appi and website is hosted on same platform
+      `/api/v1/tours/bookings/checkout-session/${tourId}`,
     );
     // console.log(session.data.session.id);
     // console.log(stripe.redirectToCheckout);
