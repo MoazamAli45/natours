@@ -19,11 +19,13 @@ const app = require('./app');
 // console.log(app.get('env'));
 
 // console.log(process.env);
-const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD,
-);
+// const DB = process.env.DATABASE.replace(
+//   '<PASSWORD>',
+//   process.env.DATABASE_PASSWORD,
+// );
 
+const DB =
+  'mongodb+srv://syedmoazamali4321:CSpsYFkr7jA8dpxs@cluster0.f2otsgj.mongodb.net/natours?retryWrites=true&w=majority';
 // UNCAUGHT EXCEPTION SYNCHRONOUS
 // console.log(x);
 
