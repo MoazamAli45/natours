@@ -17,6 +17,7 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
   // Create the session
   //   console.log(tour);
   const session = await stripe.checkout.sessions.create({
+    //   so that I can access after checkout
     metadata: {
       tourPrice: tour.price, // Store the price in metadata
     },
@@ -26,7 +27,7 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
     // success_url: `${req.protocol}://${req.get('host')}/?tour=${
     //   req.params.tourId
     // }&user=${req.user.id}&price=${tour.price}`,
-    success_url: `${req.protocol}://${req.get('host')}/my-tours`,
+    success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -43,11 +44,13 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
       {
         price_data: {
           currency: 'usd', // Change currency as needed
-          unit_amount: tour.price * 100, // Make sure this calculation is correct
+          unit_amount: tour.price, // Make sure this calculation is correct
           product_data: {
             name: `${tour.name} tour`,
             description: tour.summary,
-            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+            images: [
+              `https://natours-appproject.vercel.app/img/tours/${tour.imageCover}`,
+            ],
           },
         },
         quantity: 1,

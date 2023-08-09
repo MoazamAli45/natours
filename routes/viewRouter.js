@@ -13,6 +13,8 @@ const bookingController = require('../controllers/bookingController');
 
 // isLoggedIn
 // you can access if user login then show pic on nav
+
+// FOR SHOWING ALERTS WHEN BOOKING DONE BUT NO NEED
 // router.use(viewController.alerts);
 
 router.get(

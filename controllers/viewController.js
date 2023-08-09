@@ -67,6 +67,7 @@ exports.getMyTours = async (req, res) => {
     tours,
   });
 };
+// When Booking create show alert
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
   if (!alert) next();
