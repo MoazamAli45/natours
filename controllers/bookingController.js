@@ -8,7 +8,7 @@ const Book = require('../Model/bookModel');
 
 const handlerFactory = require('./handlerFactory');
 
-// tour router
+// In tourRouter    Checkout session created
 exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
   // console.log(req);
   // Firstly GEt the tour using ID
@@ -27,6 +27,8 @@ exports.getCheckoutSession = CatchAsync(async (req, res, next) => {
     // success_url: `${req.protocol}://${req.get('host')}/?tour=${
     //   req.params.tourId
     // }&user=${req.user.id}&price=${tour.price}`,
+
+    //         AFTER DEPLOYMENT THIS IS CREATED AS WHEN CHECK OUT Completed it firstly goes to webhooks and then come to success_url
     success_url: `${req.protocol}://${req.get('host')}/my-tours`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,

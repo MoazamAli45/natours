@@ -33,6 +33,7 @@ const sendErrorDev = (err, req, res) => {
       stack: err.stack,
     });
   } else {
+    // render pug template
     res.status(err.statusCode).render('error', {
       title: 'Something Went Wrong!',
       msg: err.message,

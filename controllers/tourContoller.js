@@ -221,6 +221,7 @@ exports.getAllTours = factory.getAll(Tour);
 //     },
 //   });
 // });
+// POPULATING REVIEWS WITH THE HELP OF ViRTUALS AS PARENT REFERENCING IS USED
 exports.getTour = factory.getOne(Tour, 'reviews');
 
 // exports.updateTour = CatchAsync(async (req, res, next) => {
@@ -464,6 +465,7 @@ exports.getMonthlyPlan = async (req, res) => {
       },
       {
         $project: {
+          // 0 means not to show
           _id: 0,
         },
       },

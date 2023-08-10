@@ -125,6 +125,9 @@ userSchema.methods.changePassword = function (JWTTimeStamp) {
 
     // if 200<300 then it password is changed
     // As token will be created one time so it means JWT time will be less than
+
+    //                     !ONE IMPORTANT THING JWT TIME STAMP MUST BE GRETATER THEN PASSWORD TIME STAMP AS WHEN PASSWORD UPDATED WE ALSO PASS JWT
+    //                      KEEP IN MIND
     return JWTTimeStamp < changeTime;
   }
 

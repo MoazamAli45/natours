@@ -63,8 +63,7 @@ const tourSchema = new mongoose.Schema(
       validate: {
         // return true if valid
         validator: function (val) {
-          // this points to document in case of new created
-
+          // this points to document in case of new created (not work for find )
           return val < this.price;
         }, // ({VALUE})  // give the value of discount
         message: 'DiscountPrice ({VALUE}) is greater than price',
@@ -139,6 +138,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 
 // VIRTUAL POPULATION
 // As we don't want to child reference for tour contain reviews so virtually connect tours wit reviews
+// PARENT REFERENCING AS WE DON"T KNOW HOW MANY REVIEWS WILL COME
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour', // IN REVIEW SCHEMA tour

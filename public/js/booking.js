@@ -18,6 +18,11 @@ const stripe = Stripe(
   'pk_test_51NcWjuL6W01XTSlfegzHaZ8VKvsbn3cTY88m0GbD7eG2L0UwekTJZtstoEOvvfv1Xu4yoCl7buXOjDFfnmVdeiwJ00yRNsesUD',
 );
 
+// 3 steps to checkout
+//     1)  Create checkout session in backend (in this project in tour router)
+//     2)  Call from frontend side
+//     3)  On success  Checkout it will post data to webhooks end point which ( in this project in app.js)
+
 export const bookTour = async (tourId) => {
   // Get the sessioon from api
   try {

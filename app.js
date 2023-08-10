@@ -7,7 +7,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+// For when resq come compression is used to compress it
 const compression = require('compression');
+// so that everyone can access api
 const cors = require('cors');
 
 const AppError = require('./utils/appError');
@@ -18,6 +20,8 @@ const reviewRouter = require('./routes/reviewRouter');
 const viewRouter = require('./routes/viewRouter');
 const bookingRouter = require('./routes/bookingRouter');
 const bookingController = require('./controllers/bookingController');
+
+// Start express app
 const app = express();
 
 // Cross Origin Resource Sharing
@@ -27,6 +31,7 @@ app.use(cors());
 // for non-simple request put,patch and delete options is called we also allowing all to access
 app.options('*', cors());
 
+// PUG template engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -39,6 +44,7 @@ app.use(helmet());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
+  // Showing incoming request
   app.use(morgan('dev'));
 }
 
@@ -59,10 +65,13 @@ app.post(
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+// FOR FORM DATA  new FORM DATA  when you are passing directly form data using action
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// to parse cookie
 app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
+// other wise $new   special characters can login
 app.use(mongoSanitize());
 
 // COntent sercurity policy as it does not add on client side
@@ -89,6 +98,7 @@ app.use(
 );
 
 // Data sanitization against XSS
+// html sanitization
 app.use(xss());
 
 //   compress for production request and responses
@@ -122,10 +132,12 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
+// Other routes that are not defined
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
+// al the errors will be caught when next(Error ) is called
 app.use(globalErrorHandler);
 
 module.exports = app;

@@ -19,6 +19,7 @@ const signToken = (id) => {
 
 // // Refactor for send JWT TOKEN BUT I WILL PREFER without that
 const createSendToken = (user, status, res) => {
+  // method above defined
   const token = signToken(user._id);
 
   const cookieOptions = {
@@ -60,7 +61,7 @@ exports.singup = CatchAsync(async (req, res) => {
     passwordChangedAt: req.body.passwordChangedAt,
     role: req.body.role,
   });
-
+  // for EMail
   const url = `${req.protocol}://${req.get('host')}/me`;
 
   // console.log(
@@ -115,7 +116,6 @@ exports.login = CatchAsync(async (req, res, next) => {
 
 // AS WE CAN"T DELETE COOKIE AND MANIPULATE AS WELL
 // SO ON LOGOUT WE WILL SEND AN INVALID COOKIE
-
 exports.logout = (req, res) => {
   const cookieOptions = {
     // will remain for 10 sec
@@ -195,7 +195,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
       // 3) NOW CHECK USER STILL EXIST
       const currentUser = await User.findById(decoded.id);
-      console.log(currentUser);
+      // console.log(currentUser);
       if (!currentUser) {
         return next();
       }

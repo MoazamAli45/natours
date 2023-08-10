@@ -11,6 +11,9 @@ const reviewModel = require('../../Model/reviewModel');
 
 const Tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 const Users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
+// AS not in callback so I am using synchronous function
+
+// JSON.parse convert into obj form
 const Reviews = JSON.parse(
   fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8'),
 );
@@ -61,6 +64,8 @@ const deleteData = async () => {
   process.exit();
 };
 
+// Command
+/// node import-dev-data --import/--delete
 if (process.argv[2] === '--import') {
   importData();
 } else if (process.argv[2] === '--delete') {

@@ -20,6 +20,7 @@ class APIFeatures {
     let queryString = JSON.stringify(queryObject);
     queryString = queryString.replace(
       /\b(gte|gt|lte|lt)\b/g,
+      // $gte $gt $lte $lt     That will match with query string
       (match) => `$${match}`,
     );
 
@@ -40,6 +41,7 @@ class APIFeatures {
       // Chaining
       this.query = this.query.sort(sortBy);
     } else {
+      // by default on time basis
       this.query = this.query.sort('createdAt');
     }
     return this;

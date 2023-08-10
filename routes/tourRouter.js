@@ -77,7 +77,6 @@ tourRouter
   );
 
 // for Checkout Stripe
-
 tourRouter.get(
   '/bookings/checkout-session/:tourId',
   authController.protect,
